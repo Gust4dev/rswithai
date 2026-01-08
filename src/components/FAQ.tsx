@@ -16,9 +16,9 @@ const faqs = [
       "Sim! Aceitamos empresas de 10 funcionários em diante. Na verdade, empresas menores costumam ter agilidade para implementar e dar feedback mais rápido.",
   },
   {
-    question: "E se eu não gostar?",
+    question: "Tem contrato de fidelidade?",
     answer:
-      "Você tem garantia de 30 dias. Se não estiver satisfeito, cancelamos e devolvemos 100% do valor. Sem perguntas, sem burocracia.",
+      "Não. Você tem liberdade total. O plano é mensal e você pode cancelar a qualquer momento sem multa. Se não gostar, basta não renovar.",
   },
   {
     question: "Quanto tempo leva para implementar?",

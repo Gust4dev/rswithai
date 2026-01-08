@@ -8,6 +8,8 @@ const inter = Inter({
   display: "swap",
 });
 
+import { ScrollToTop } from "@/components";
+
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
@@ -86,7 +88,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ScrollToTop />
+        {children}
+      </body>
     </html>
   );
 }

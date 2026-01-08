@@ -50,7 +50,8 @@ const plans = [
 
 export function PricingCards() {
   return (
-    <section className="section" id="pricing">
+    <section className="section-subtle relative overflow-hidden" id="pricing">
+      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none" />
       <div className="container-wide">
         <motion.div
           className="text-center mb-16"
@@ -190,7 +191,7 @@ export function PricingCards() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           ✓ Sem fidelidade &nbsp;•&nbsp; ✓ Cancele quando quiser &nbsp;•&nbsp; ✓
-          Garantia de 30 dias
+          Acesso imediato
         </motion.p>
       </div>
     </section>

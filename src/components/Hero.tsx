@@ -2,15 +2,9 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, CheckCircle, Play } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui";
 import { scrollToElement } from "@/lib/utils";
-
-const trustBadges = [
-  "100% gratuito durante o beta",
-  "Sem cartão de crédito",
-  "Setup em 5 minutos",
-];
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -35,13 +29,13 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-primary/5" />
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-[--bg-base] to-[--bg-muted]">
+      {/* 1. Animated Grid Background */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
 
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+      {/* 2. Glow Effects */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] opacity-50 animate-pulse pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] opacity-50 animate-pulse delay-1000 pointer-events-none" />
 
       <div className="container-wide relative z-10 py-20 md:py-32">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -54,124 +48,152 @@ export function Hero() {
           >
             {/* Badge */}
             <motion.div variants={fadeInUp}>
-              <span className="badge-accent inline-flex items-center gap-2 mb-6">
-                🚀 Beta Exclusivo - Vagas Limitadas
-              </span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-primary/20 mb-8">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+                </span>
+                <span className="text-sm font-semibold text-text">
+                  Beta Exclusivo: Restam 8 Vagas
+                </span>
+              </div>
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 className="text-hero mb-6" variants={fadeInUp}>
-              Contrate em <span className="gradient-text">7 dias</span>
-              <br />
-              <span className="text-text-light text-3xl md:text-4xl lg:text-5xl">
-                Com IA que faz a triagem por você
+            <motion.h1
+              className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 text-text"
+              variants={fadeInUp}
+            >
+              Contrate em <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary bg-300% animate-shine">
+                7 Dias
               </span>
             </motion.h1>
 
             {/* Subheadline */}
             <motion.p
-              className="text-body text-text-light max-w-xl mx-auto lg:mx-0 mb-8"
+              className="text-xl text-text-light max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed"
               variants={fadeInUp}
             >
-              Sistema de recrutamento com IA que analisa currículos
-              automaticamente, elimina candidatos desqualificados e entrega só
-              os melhores para você entrevistar. Transforme o caos do RH em
-              processo previsível.
+              A única IA que tria currículos como um recrutador sênior. Elimine
+              o caos do RH e foque apenas em entrevistar os melhores.
             </motion.p>
 
             {/* CTAs */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
               variants={fadeInUp}
             >
-              <Button size="lg" onClick={handlePrimaryCTA} className="group">
-                Quero Ser Beta Tester
+              <Button
+                size="lg"
+                onClick={handlePrimaryCTA}
+                className="group h-14 px-8 text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all"
+              >
+                Quero Acesso Beta
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
                 variant="secondary"
                 size="lg"
                 onClick={handleSecondaryCTA}
-                className="group"
+                className="group h-14 px-8 text-lg bg-white/80 backdrop-blur-sm hover:bg-white"
               >
-                <Play className="w-5 h-5" />
-                Ver Como Funciona
+                <Play className="w-5 h-5 mr-2" />
+                Como Funciona
               </Button>
             </motion.div>
 
-            {/* Trust badges */}
+            {/* Compatibility/Social Proof */}
             <motion.div
-              className="flex flex-wrap gap-4 justify-center lg:justify-start"
+              className="flex flex-col items-center lg:items-start gap-4"
               variants={fadeInUp}
             >
-              {trustBadges.map((badge) => (
-                <span
-                  key={badge}
-                  className="inline-flex items-center gap-1.5 text-sm text-text-light"
-                >
-                  <CheckCircle className="w-4 h-4 text-secondary" />
-                  {badge}
-                </span>
-              ))}
+              <p className="text-sm font-medium text-text-light uppercase tracking-wider">
+                Compatível com
+              </p>
+              <div className="flex gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                {/* Lucide Icons representing platforms */}
+                <div className="flex items-center gap-2" title="LinkedIn">
+                  <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold text-xs shadow-sm">
+                    in
+                  </div>
+                </div>
+                <div className="flex items-center gap-2" title="Gmail">
+                  <div className="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center text-white font-bold text-xs shadow-sm">
+                    M
+                  </div>
+                </div>
+                <div className="flex items-center gap-2" title="PDF/Word">
+                  <div className="w-8 h-8 bg-slate-700 rounded-md flex items-center justify-center text-white font-bold text-xs shadow-sm">
+                    doc
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
 
           {/* Right column - Visual */}
           <motion.div
-            className="relative"
-            initial={{ opacity: 0, scale: 0.9, x: 50 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            className="relative perspective-1000"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="relative aspect-square max-w-lg mx-auto">
-              {/* Glow effect behind image */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-2xl" />
+            {/* Main Image Container with pure CSS 3D effect */}
+            <div className="relative z-10 transform transition-transform duration-700 hover:rotate-y-6 hover:rotate-x-6 preserve-3d">
+              <div className="absolute inset-0 bg-primary/20 blur-3xl -z-10 rounded-full" />
+              <Image
+                src="/images/hero-visual.png"
+                alt="Dashboard Inteligente"
+                width={700}
+                height={700}
+                className="w-full h-auto drop-shadow-2xl rounded-2xl border border-white/40 shadow-2xl"
+                priority
+              />
 
-              {/* Main illustration */}
-              <div className="relative z-10">
-                <Image
-                  src="/images/hero-visual.png"
-                  alt="Sistema de RH com IA - Dashboard"
-                  width={600}
-                  height={600}
-                  className="w-full h-auto drop-shadow-2xl"
-                  priority
-                />
-              </div>
-
-              {/* Floating stats cards */}
+              {/* Floating Element 1 - Approved Candidate */}
               <motion.div
-                className="absolute -left-4 top-1/4 z-20 bg-white rounded-xl shadow-xl p-4 border border-gray-200"
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
+                className="absolute -left-4 top-10 md:-left-8 md:top-20 bg-white p-4 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/50 backdrop-blur-md"
+                animate={{ y: [0, -10, 0] }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
-                    <span className="text-xl">📈</span>
+                  <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">
+                    ✓
                   </div>
                   <div>
-                    <p className="text-sm text-text-light">Tempo economizado</p>
-                    <p className="font-bold text-secondary">-75%</p>
+                    <div className="text-xs text-gray-500">
+                      Candidato Aprovado
+                    </div>
+                    <div className="font-bold text-gray-800">98% Match</div>
                   </div>
                 </div>
               </motion.div>
 
+              {/* Floating Element 2 - Speed */}
               <motion.div
-                className="absolute -right-4 bottom-1/4 z-20 bg-white rounded-xl shadow-xl p-4 border border-gray-200"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
+                className="absolute -right-4 bottom-10 md:-right-8 md:bottom-20 bg-white p-4 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/50 backdrop-blur-md"
+                animate={{ y: [0, 10, 0] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1,
+                }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-xl">🎯</span>
+                  <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                    ⚡
                   </div>
                   <div>
-                    <p className="text-sm text-text-light">
-                      Candidatos qualificados
-                    </p>
-                    <p className="font-bold text-primary">Top 10</p>
+                    <div className="text-xs text-gray-500">
+                      Tempo de Triagem
+                    </div>
+                    <div className="font-bold text-gray-800">30 segs</div>
                   </div>
                 </div>
               </motion.div>
@@ -179,39 +201,6 @@ export function Hero() {
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.5 }}
-      >
-        <button
-          onClick={() => scrollToElement("social-proof")}
-          className="flex flex-col items-center gap-2 text-text-light hover:text-primary transition-colors"
-          aria-label="Scroll para baixo"
-        >
-          <span className="text-sm">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 5v14M19 12l-7 7-7-7" />
-            </svg>
-          </motion.div>
-        </button>
-      </motion.div>
     </section>
   );
 }

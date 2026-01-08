@@ -12,3 +12,4 @@ export { CTAForm } from "./CTAForm";
 export { Footer } from "./Footer";
 export { ExitIntentModal } from "./ExitIntentModal";
 export { Analytics, trackEvent } from "./Analytics";
+export { ScrollToTop } from "./ScrollToTop";

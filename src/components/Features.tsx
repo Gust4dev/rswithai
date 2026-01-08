@@ -70,7 +70,9 @@ const itemVariants = {
 
 export function Features() {
   return (
-    <section className="section" id="features">
+    <section className="section-muted relative overflow-hidden" id="features">
+      {/* Texture Overlay */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-50 pointer-events-none" />
       <div className="container-wide">
         <motion.div
           className="text-center mb-16"

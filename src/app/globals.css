@@ -17,11 +17,29 @@
   --color-white: #ffffff;
   --color-border: #e5e7eb;
 
+  /* Background Tiers System - Reduces eye strain */
+  /* Revamped: darker greys and stronger indigos */
+  --bg-base: #f0f4f8; /* Slate-100+: Clear separation from white */
+  --bg-elevated: #ffffff; /* Cards */
+  --bg-subtle: #e2e8f0; /* Slate-200: Solid light grey */
+  --bg-muted: #e0e7ff; /* Indigo-100: Distinct blue tint */
+  --bg-accent: #c7d2fe; /* Indigo-200: Visible accent */
+
+  /* Pattern Overlay */
+  --pattern-grid: linear-gradient(
+      to right,
+      rgba(99, 102, 241, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   --gradient-secondary: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
   --gradient-hero: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
+  --gradient-section-cool: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  --gradient-section-neutral: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -48,6 +66,24 @@
   box-sizing: border-box;
 }
 
+/* Fix crítico para linhas diagonais em SVGs (Lucide React) */
+svg {
+  /* 1. Garante suavidade nas bordas */
+  shape-rendering: geometricPrecision !important;
+
+  /* 2. Força camada de composição na GPU */
+  transform: translateZ(0);
+
+  /* 3. Oculta face traseira */
+  backface-visibility: hidden;
+
+  /* 4. O TRUQUE MÁGICO: Previne vazamento de pixels */
+  outline: 1px solid transparent;
+
+  /* 5. Previne cortes de caixa */
+  overflow: visible !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -55,7 +91,7 @@ html {
 body {
   font-family: var(--font-inter), system-ui, sans-serif;
   color: var(--color-text);
-  background-color: var(--color-background);
+  background-color: var(--bg-base);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -110,16 +146,12 @@ body {
 .btn-primary {
   @apply btn text-white;
   background: var(--gradient-primary);
-  box-shadow:
-    var(--shadow-md),
-    0 0 0 0 rgba(99, 102, 241, 0.5);
+  box-shadow: var(--shadow-md), 0 0 0 0 rgba(99, 102, 241, 0.5);
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.02);
-  box-shadow:
-    var(--shadow-xl),
-    0 0 30px rgba(99, 102, 241, 0.4);
+  box-shadow: var(--shadow-xl), 0 0 30px rgba(99, 102, 241, 0.4);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -173,6 +205,21 @@ body {
 
 .section-dark {
   @apply section bg-gray-900 text-white;
+}
+
+.section-subtle {
+  @apply section;
+  background: var(--bg-subtle);
+}
+
+.section-muted {
+  @apply section;
+  background: var(--bg-muted);
+}
+
+.section-gradient {
+  @apply section;
+  background: var(--gradient-section-cool);
 }
 
 .container-narrow {
@@ -289,6 +336,49 @@ body {
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-light);
+/* ========================================
+   Patterns & Textures
+   ======================================== */
+
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: var(--pattern-grid);
+  mask-image: linear-gradient(to bottom, transparent, black, transparent);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 5%,
+    black 40%,
+    black 70%,
+    transparent 95%
+  );
+}
+
+/* ========================================
+   Animation Utilities (Hero 2.0)
+   ======================================== */
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.animate-shine {
+  animation: shine 4s linear infinite;
+}
+
+.bg-300\% {
+  background-size: 300% auto;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.dark-glow {
+  box-shadow: 0 0 80px 20px rgba(99, 102, 241, 0.4);
 }

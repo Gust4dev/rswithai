@@ -32,7 +32,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="section bg-background" id="how-it-works">
+    <section className="section-gradient" id="how-it-works">
       <div className="container-wide">
         <motion.div
           className="text-center mb-16"
@@ -65,7 +65,7 @@ export function HowItWorks() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.15 * index }}
               >
-                <div className="bg-white rounded-2xl p-6 border border-border hover:shadow-xl transition-all duration-300 h-full">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-sm hover:shadow-xl transition-all duration-300 h-full">
                   {/* Step number */}
                   <div
                     className={`
