@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { betaFormSchema } from "@/lib/validations";
-// import { notion } from "@/lib/notion";
-// import { resend } from "@/lib/resend";
+import { addLead, isSheetsConfigured } from "@/lib/sheets";
+import { sendWelcomeEmail, isBrevoConfigured } from "@/lib/brevo";
 
 // Simple in-memory rate limiting (replace with Redis in production)
 const rateLimit = new Map<string, { count: number; timestamp: number }>();
@@ -72,51 +72,8 @@ export async function POST(request: NextRequest) {
             ? `+${whatsappDigits}`
             : `+55${whatsappDigits}`;
 
-        // TODO: Uncomment when Notion is configured
-        // Save to Notion
-        /*
-        await notion.pages.create({
-          parent: { database_id: process.env.NOTION_DATABASE_ID! },
-          properties: {
-            'Nome': { title: [{ text: { content: data.name } }] },
-            'Email': { email: data.email },
-            'Empresa': { rich_text: [{ text: { content: data.company } }] },
-            'Cargo': { rich_text: [{ text: { content: data.role } }] },
-            'Funcionários': { select: { name: data.employees } },
-            'WhatsApp': { phone_number: formattedWhatsapp },
-            'Plano': { select: { name: data.plan === 'pro' ? 'Beta Pro' : 'Beta Básico' } },
-            'Dor Principal': { rich_text: [{ text: { content: data.painPoint || '' } }] },
-            'Status': { select: { name: 'Novo' } },
-            'Data de Cadastro': { date: { start: new Date().toISOString() } },
-          },
-        });
-        */
-
-        // TODO: Uncomment when Resend is configured
-        // Send confirmation email
-        /*
-        await resend.emails.send({
-          from: `Beta <contato@${process.env.NEXT_PUBLIC_SITE_URL?.replace('https://', '').replace('http://', '')}>`,
-          to: data.email,
-          subject: '✅ Candidatura Recebida - Beta RH Tech',
-          html: `
-            <h1>Oi ${data.name.split(' ')[0]}!</h1>
-            <p>Recebemos sua candidatura para o programa beta.</p>
-            <h2>🎯 Próximos passos:</h2>
-            <ol>
-              <li>Analisaremos seu perfil (até 24h)</li>
-              <li>Se aprovado, você receberá as credenciais</li>
-              <li>Aí é só logar e começar!</li>
-            </ol>
-            <p><strong>Plano escolhido:</strong> ${data.plan === 'pro' ? 'Beta Pro' : 'Beta Básico'}</p>
-            <p>Qualquer dúvida, responda este email.</p>
-            <p>Abraços,<br>Equipe RH Tech</p>
-          `,
-        });
-        */
-
-        // Log for debugging (remove in production)
-        console.log("Beta signup received:", {
+        // Log for debugging
+        console.log("📝 Beta signup received:", {
             name: data.name,
             email: data.email,
             company: data.company,
@@ -124,6 +81,42 @@ export async function POST(request: NextRequest) {
             whatsapp: formattedWhatsapp,
             timestamp: new Date().toISOString(),
         });
+
+        // Save to Google Sheets
+        if (isSheetsConfigured()) {
+            try {
+                await addLead({
+                    name: data.name,
+                    email: data.email,
+                    company: data.company,
+                    role: data.role,
+                    employees: data.employees,
+                    whatsapp: formattedWhatsapp,
+                    plan: data.plan,
+                    painPoint: data.painPoint || "",
+                });
+                console.log("✅ Lead saved to Google Sheets");
+            } catch (error) {
+                console.error("❌ Error saving to Google Sheets:", error);
+                // Continue mesmo se falhar (não queremos bloquear o usuário)
+            }
+        } else {
+            console.warn("⚠️ Google Sheets not configured - lead not saved to database");
+        }
+
+        // Send confirmation email via Brevo
+        if (isBrevoConfigured()) {
+            try {
+                const planLabel = data.plan === "pro" ? "Beta Pro 🔥" : "Beta Básico";
+                await sendWelcomeEmail(data.email, data.name, planLabel);
+                console.log("✅ Welcome email sent via Brevo");
+            } catch (error) {
+                console.error("❌ Error sending email via Brevo:", error);
+                // Continue mesmo se falhar
+            }
+        } else {
+            console.warn("⚠️ Brevo not configured - welcome email not sent");
+        }
 
         return NextResponse.json({
             success: true,

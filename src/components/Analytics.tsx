@@ -3,7 +3,7 @@
 import Script from "next/script";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const HOTJAR_ID = process.env.NEXT_PUBLIC_HOTJAR_ID;
+const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
 const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
 
 export function Analytics() {
@@ -29,18 +29,15 @@ export function Analytics() {
         </>
       )}
 
-      {/* Hotjar */}
-      {HOTJAR_ID && HOTJAR_ID !== "xxxxx" && (
-        <Script id="hotjar" strategy="afterInteractive">
+      {/* Microsoft Clarity */}
+      {CLARITY_ID && CLARITY_ID !== "xxxxx" && (
+        <Script id="clarity" strategy="afterInteractive">
           {`
-            (function(h,o,t,j,a,r){
-              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-              h._hjSettings={hjid:${HOTJAR_ID},hjsv:6};
-              a=o.getElementsByTagName('head')[0];
-              r=o.createElement('script');r.async=1;
-              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-              a.appendChild(r);
-            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "${CLARITY_ID}");
           `}
         </Script>
       )}
@@ -66,16 +63,11 @@ export function Analytics() {
   );
 }
 
-// GA4 event tracking helper
-export function trackEvent(
-  eventName: string,
-  parameters?: Record<string, string | number | boolean>
-) {
-  if (typeof window !== "undefined" && "gtag" in window) {
-    (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
-      "event",
-      eventName,
-      parameters
-    );
-  }
-}
+// Re-export tracking functions from analytics lib
+export {
+  trackEvent,
+  trackFormSubmit,
+  trackPlanSelection,
+  trackExitIntent,
+  trackCTAClick,
+} from "@/lib/analytics";

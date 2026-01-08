@@ -3,6 +3,16 @@ import { z } from "zod";
 /**
  * Beta tester form validation schema
  */
+// Domínios de email pessoal bloqueados por padrão
+const personalDomains = [
+    "gmail.com",
+    "hotmail.com",
+    "outlook.com",
+    "yahoo.com",
+    "icloud.com",
+    "live.com",
+];
+
 export const betaFormSchema = z.object({
     name: z
         .string()
@@ -23,24 +33,12 @@ export const betaFormSchema = z.object({
         errorMap: () => ({ message: "Selecione o número de funcionários" }),
     }),
 
+    // Flag para permitir email pessoal
+    usePersonalEmail: z.boolean().optional().default(false),
+
     email: z
         .string()
-        .email("Email inválido")
-        .refine(
-            (email) => {
-                const personalDomains = [
-                    "gmail.com",
-                    "hotmail.com",
-                    "outlook.com",
-                    "yahoo.com",
-                    "icloud.com",
-                    "live.com",
-                ];
-                const domain = email.split("@")[1]?.toLowerCase();
-                return !personalDomains.includes(domain);
-            },
-            { message: "Por favor, use seu email corporativo" }
-        ),
+        .email("Email inválido"),
 
     whatsapp: z
         .string()
@@ -66,7 +64,20 @@ export const betaFormSchema = z.object({
     consent: z.boolean().refine((val) => val === true, {
         message: "Você precisa concordar com os termos",
     }),
-});
+}).refine(
+    (data) => {
+        // Se usePersonalEmail estiver marcado, aceita qualquer email
+        if (data.usePersonalEmail) return true;
+
+        // Caso contrário, bloqueia domínios pessoais
+        const domain = data.email.split("@")[1]?.toLowerCase();
+        return !personalDomains.includes(domain);
+    },
+    {
+        message: "Por favor, use seu email corporativo ou marque a opção abaixo",
+        path: ["email"],
+    }
+);
 
 export type BetaFormData = z.infer<typeof betaFormSchema>;
 

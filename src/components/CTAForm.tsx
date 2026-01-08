@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Send, Loader2 } from "lucide-react";
+import { Send } from "lucide-react";
 import { Button, Input, Select, Textarea } from "@/components/ui";
 import { betaFormSchema, type BetaFormData } from "@/lib/validations";
 
@@ -31,6 +31,7 @@ export function CTAForm() {
     defaultValues: {
       plan: "pro",
       consent: false,
+      usePersonalEmail: false,
     },
   });
 
@@ -189,14 +190,36 @@ export function CTAForm() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
-              <Input
-                label="Email Corporativo"
-                type="email"
-                placeholder="voce@empresa.com.br"
-                error={errors.email?.message}
-                required
-                {...register("email")}
-              />
+              <div className="space-y-2">
+                <Input
+                  label={
+                    watch("usePersonalEmail") ? "Email" : "Email Corporativo"
+                  }
+                  type="email"
+                  placeholder={
+                    watch("usePersonalEmail")
+                      ? "seuemail@gmail.com"
+                      : "voce@empresa.com.br"
+                  }
+                  error={errors.email?.message}
+                  required
+                  {...register("email")}
+                />
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="usePersonalEmail"
+                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                    {...register("usePersonalEmail")}
+                  />
+                  <label
+                    htmlFor="usePersonalEmail"
+                    className="text-xs text-text-light cursor-pointer"
+                  >
+                    Não tenho email corporativo
+                  </label>
+                </div>
+              </div>
               <Input
                 label="WhatsApp"
                 type="tel"
@@ -252,10 +275,7 @@ export function CTAForm() {
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Enviando...
-                </>
+                "Enviando..."
               ) : (
                 <>
                   <Send className="w-5 h-5" />
