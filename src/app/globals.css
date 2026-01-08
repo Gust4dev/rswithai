@@ -1,0 +1,294 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   RH Tech - Design System
+   ======================================== */
+
+:root {
+  /* Colors */
+  --color-primary: #6366f1;
+  --color-secondary: #10b981;
+  --color-accent: #f59e0b;
+  --color-text: #1f2937;
+  --color-text-light: #6b7280;
+  --color-background: #f9fafb;
+  --color-white: #ffffff;
+  --color-border: #e5e7eb;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --gradient-secondary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-hero: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.3);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+
+.text-hero {
+  @apply text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight;
+  line-height: 1.1;
+}
+
+.text-section {
+  @apply text-3xl md:text-4xl font-bold tracking-tight;
+  line-height: 1.2;
+}
+
+.text-subsection {
+  @apply text-xl md:text-2xl font-semibold;
+}
+
+.text-body {
+  @apply text-base md:text-lg;
+}
+
+.text-body-sm {
+  @apply text-sm md:text-base;
+}
+
+/* ========================================
+   Gradient Text
+   ======================================== */
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 font-semibold rounded-xl px-6 py-3
+         transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-primary {
+  @apply btn text-white;
+  background: var(--gradient-primary);
+  box-shadow:
+    var(--shadow-md),
+    0 0 0 0 rgba(99, 102, 241, 0.5);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-secondary {
+  @apply btn bg-white text-primary border-2 border-primary/20;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  @apply bg-primary/5 border-primary/40;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  @apply btn text-text-light bg-transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  @apply text-primary bg-primary/5;
+}
+
+/* ========================================
+   Cards
+   ======================================== */
+
+.card {
+  @apply bg-white rounded-2xl p-6 border border-gray-200;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.card-highlight {
+  @apply card border-2 border-primary;
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+/* ========================================
+   Section Layout
+   ======================================== */
+
+.section {
+  @apply py-16 md:py-24 px-4;
+}
+
+.section-dark {
+  @apply section bg-gray-900 text-white;
+}
+
+.container-narrow {
+  @apply max-w-4xl mx-auto;
+}
+
+.container-wide {
+  @apply max-w-7xl mx-auto;
+}
+
+/* ========================================
+   Badge
+   ======================================== */
+
+.badge {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-primary {
+  @apply badge bg-primary/10 text-primary;
+}
+
+.badge-secondary {
+  @apply badge bg-secondary/10 text-secondary;
+}
+
+.badge-accent {
+  @apply badge bg-accent/10 text-accent;
+}
+
+/* ========================================
+   Form Elements
+   ======================================== */
+
+.input {
+  @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-text
+         placeholder:text-text-light/60 transition-all duration-200
+         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
+}
+
+.input-error {
+  @apply input border-red-500 focus:ring-red-500/20 focus:border-red-500;
+}
+
+.label {
+  @apply block text-sm font-medium text-text mb-1.5;
+}
+
+.error-message {
+  @apply text-sm text-red-500 mt-1;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-border {
+  0%,
+  100% {
+    border-color: rgba(99, 102, 241, 0.5);
+  }
+  50% {
+    border-color: rgba(99, 102, 241, 1);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Scroll Reveal (works with Framer Motion)
+   ======================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.6s ease-out;
+}
+
+/* ========================================
+   Custom Scrollbar
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-light);
+}
